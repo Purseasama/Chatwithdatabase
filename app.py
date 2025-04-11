@@ -272,4 +272,4 @@ try:
                 # Display response
                 with st.chat_message("assistant"):
                     st.markdown(f"Here's what I found:")
-                    st.write
+                    st.write(answer)
