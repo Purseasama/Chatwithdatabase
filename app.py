@@ -277,5 +277,6 @@ try:
                         st.write(answer)
                 else:
                     st.error("No answer was generated.")
+            
             except Exception as e:
                 st.error(f"Error executing generated code: {str(e)}")
