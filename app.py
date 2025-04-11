@@ -1,16 +1,10 @@
 import streamlit as st
 import pandas as pd
 import google.generativeai as genai
-from dotenv import load_dotenv
-import os
-from datetime import datetime
 import random
 
-# Load environment variables
-load_dotenv()
-
-# Configure Gemini
-genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
+# Configure Gemini using the secret key
+genai.configure(api_key=st.secrets["google"]["api_key"])
 
 # Set up the model configuration
 generation_config = {
@@ -31,40 +25,33 @@ safety_settings = [
 @st.cache_data
 def load_data():
     try:
-        # Load the combined orders data
-        df = pd.read_csv('/Users/purse/Documents/cake_shop_chat/data/combined_orders.csv')
-        
+        # Load the combined orders data from the same directory
+        df = pd.read_csv('combined_orders.csv')  # Adjusted path
         # Convert date columns to datetime with flexible parsing
         date_columns = ['Delivery Date']
         for col in date_columns:
             if col in df.columns:
-                # Try multiple formats with error handling
                 try:
-                    # Try with format specified (DD/MM/YYYY)
                     df[col] = pd.to_datetime(df[col], format='%d/%m/%Y')
                 except Exception:
                     try:
-                        # Try with dayfirst=True for flexible parsing
                         df[col] = pd.to_datetime(df[col], dayfirst=True)
                     except Exception:
                         try:
-                            # Try with format='mixed' as suggested in the error
                             df[col] = pd.to_datetime(df[col], format='mixed')
                         except Exception as e:
                             st.warning(f"Could not parse dates in column '{col}': {str(e)}")
-                            # Keep as string if all parsing attempts fail
                             pass
         
         return df
     except Exception as e:
         st.error(f"Error loading data: {str(e)}")
-        # Return empty DataFrame as fallback
         return pd.DataFrame()
 
 @st.cache_data
 def load_data_dictionary():
     try:
-        return pd.read_csv('/Users/purse/Documents/cake_shop_chat/data/data_dictionary.csv')
+        return pd.read_csv('data_dictionary.csv')  # Adjusted path
     except Exception as e:
         st.warning(f"Could not load data dictionary: {str(e)}")
         return pd.DataFrame(columns=['Column', 'Description'])
@@ -222,7 +209,7 @@ try:
                         df['Delivery Date'] = df['Delivery Date'].dt.strftime('%d/%m/%Y')
                     
                     # Save updated dataframe
-                    df.to_csv('/Users/purse/Documents/cake_shop_chat/combined_orders.csv', index=False)
+                    df.to_csv('combined_orders.csv', index=False)  # Adjusted path
                     
                     st.success(f"Order {order_id} added successfully!")
                     st.cache_data.clear()  # Clear cache to reload data
@@ -285,16 +272,4 @@ try:
                 # Display response
                 with st.chat_message("assistant"):
                     st.markdown(f"Here's what I found:")
-                    st.write(answer)
-                    
-                st.session_state.messages.append({"role": "assistant", "content": str(answer)})
-                
-            except Exception as e:
-                st.error(f"Error executing code: {str(e)}")
-                st.code(code, language="python")
-                
-        except Exception as e:
-            st.error(f"Error generating response: {str(e)}")
-
-except Exception as e:
-    st.error(f"Application error: {str(e)}")
+                    st.write
