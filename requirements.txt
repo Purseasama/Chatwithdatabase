@@ -1,0 +1,18 @@
+# Core packages
+streamlit==1.31.0
+pandas==2.2.0
+numpy==1.26.0
+
+# For LangChain and Gemini integration
+langchain==0.1.0
+langchain-google-genai==0.0.6
+google-generativeai==0.3.2
+python-dotenv==1.0.0
+
+# Database and vector store
+chromadb==0.4.22
+sqlalchemy==2.0.25
+
+# Additional utilities
+python-dateutil==2.8.2
+pytz==2024.1
