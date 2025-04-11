@@ -273,10 +273,16 @@ try:
                 if answer is not None:
                     # Display response
                     with st.chat_message("assistant"):
-                        st.markdown(f"Here's what I found:")
+                        st.markdown("Here's what I found:")
                         st.write(answer)
                 else:
                     st.error("No answer was generated.")
             
             except Exception as e:
                 st.error(f"Error executing generated code: {str(e)}")
+        
+        except Exception as e:
+            st.error(f"Error generating response: {str(e)}")
+            
+except Exception as e:
+    st.error(f"An unexpected error occurred: {str(e)}")
